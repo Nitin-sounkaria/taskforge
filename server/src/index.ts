@@ -1,3 +1,4 @@
+console.log('🏗️ TaskForge: Booting server...');
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -58,6 +59,7 @@ app.use(errorHandler);
 app.listen(env.PORT, () => {
   console.log(`🚀 TaskForge server running on port ${env.PORT}`);
   console.log(`📊 Environment: ${env.NODE_ENV}`);
+  console.log(`🛠️ Deployment Command: cd server && (npx prisma migrate deploy || echo 'Migration failed') && node dist/index.js`);
 });
 
 export default app;
