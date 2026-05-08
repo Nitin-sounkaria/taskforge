@@ -6,7 +6,7 @@ A full-stack project management web application with authentication, role-based 
 
 - **Frontend:** React 18, Vite, Recharts, Lucide Icons
 - **Backend:** Node.js, Express, TypeScript
-- **Database:** MongoDB (NoSQL) + Prisma ORM
+- **Database:** PostgreSQL (Supabase) + Prisma ORM
 - **Auth:** JWT (access + refresh tokens) + bcrypt
 - **Deployment:** Railway
 
@@ -58,18 +58,18 @@ A full-stack project management web application with authentication, role-based 
 
 5. Open http://localhost:5173
 
-## Railway Deployment
+## Railway + Supabase Deployment
 
 1. Push code to GitHub
-2. Create a new project on [Railway](https://railway.app)
-3. Add a **MongoDB** service
-4. Connect your GitHub repo
+2. Create a project on [Supabase](https://supabase.com)
+3. Get your **Connection string** (Transaction mode / Pooler) from Supabase Settings -> Database.
+4. On Railway, create a new project from your GitHub repo.
 5. Set environment variables:
-   - `JWT_SECRET` — random secure string
-   - `JWT_REFRESH_SECRET` — another random secure string
-   - `NODE_ENV` — `production`
-   - `DATABASE_URL` — from Railway MongoDB service (ensure it includes `/taskforge?authSource=admin` at the end)
-6. Deploy — Railway will auto-detect the build config
+   - `JWT_SECRET`: random string
+   - `JWT_REFRESH_SECRET`: random string
+   - `NODE_ENV`: `production`
+   - `DATABASE_URL`: Your Supabase connection string.
+6. Deploy.
 
 ## API Endpoints
 
