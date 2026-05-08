@@ -105,4 +105,83 @@ router.get('/recent-activity', authenticate, async (req: AuthRequest, res: Respo
   }
 });
 
+// GET /api/dashboard/charts — rich chart data
+router.get('/charts', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user!.userId;
+    const isAdmin = req.user!.role === 'ADMIN';
+
+    const projectIds = isAdmin
+      ? (await prisma.project.findMany({ select: { id: true } })).map((p) => p.id)
+      : (await prisma.projectMember.findMany({ where: { userId }, select: { projectId: true } })).map((m) => m.projectId);
+
+    // Priority distribution
+    const allTasks = await prisma.task.findMany({
+      where: { projectId: { in: projectIds } },
+      select: { priority: true, status: true, projectId: true, assigneeId: true, createdAt: true },
+    });
+
+    const priorityCounts = { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 };
+    allTasks.forEach((t) => { if (priorityCounts[t.priority] !== undefined) priorityCounts[t.priority]++; });
+
+    // Tasks per project
+    const projects = await prisma.project.findMany({
+      where: { id: { in: projectIds } },
+      select: { id: true, name: true, _count: { select: { tasks: true } } },
+    });
+    const tasksByProject = projects.map((p) => ({ name: p.name, tasks: p._count.tasks }));
+
+    // Daily activity for past 14 days
+    const fourteenDaysAgo = new Date();
+    fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+    const recentActivities = await prisma.activityLog.findMany({
+      where: { projectId: { in: projectIds }, createdAt: { gte: fourteenDaysAgo } },
+      select: { createdAt: true, action: true },
+    });
+
+    const dailyActivity: Record<string, { date: string; tasks_created: number; tasks_updated: number; total: number }> = {};
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      dailyActivity[key] = { date: key, tasks_created: 0, tasks_updated: 0, total: 0 };
+    }
+    recentActivities.forEach((a) => {
+      const key = a.createdAt.toISOString().slice(0, 10);
+      if (dailyActivity[key]) {
+        dailyActivity[key].total++;
+        if (a.action === 'TASK_CREATED') dailyActivity[key].tasks_created++;
+        else if (a.action === 'TASK_UPDATED') dailyActivity[key].tasks_updated++;
+      }
+    });
+
+    // Workload by member
+    const members = await prisma.projectMember.findMany({
+      where: { projectId: { in: projectIds } },
+      select: { userId: true, user: { select: { name: true } } },
+      distinct: ['userId'],
+    });
+    const workload = await Promise.all(
+      members.map(async (m) => {
+        const assigned = await prisma.task.count({
+          where: { projectId: { in: projectIds }, assigneeId: m.userId, status: { not: 'DONE' } },
+        });
+        const completed = await prisma.task.count({
+          where: { projectId: { in: projectIds }, assigneeId: m.userId, status: 'DONE' },
+        });
+        return { name: m.user.name, active: assigned, completed };
+      })
+    );
+
+    res.json({
+      priorityCounts,
+      tasksByProject,
+      dailyActivity: Object.values(dailyActivity),
+      workload,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch chart data' });
+  }
+});
+
 export default router;
