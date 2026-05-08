@@ -1,0 +1,14 @@
+{
+  "name": "taskforge",
+  "version": "1.0.0",
+  "description": "Project management web app with role-based access control",
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "build": "cd server && npm install && npx prisma generate && npm run build && cd ../client && npm install && npm run build",
+    "start": "node server/dist/index.js",
+    "prisma:migrate": "cd server && npx prisma migrate dev",
+    "prisma:generate": "cd server && npx prisma generate"
+  }
+}

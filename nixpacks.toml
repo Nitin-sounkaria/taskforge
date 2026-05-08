@@ -1,0 +1,9 @@
+[build]
+  provider = "nixpacks"
+
+[build.nixpacks]
+  install_cmd = "cd server && npm install && npx prisma generate && cd ../client && npm install"
+  build_cmd = "cd server && npm run build && cd ../client && npm run build"
+
+[deploy]
+  start_cmd = "cd server && npx prisma migrate deploy && node dist/index.js"
