@@ -60,15 +60,19 @@ A full-stack project management web application with authentication, role-based 
 
 ## Railway + Supabase Deployment
 
-1. Push code to GitHub
-2. Create a project on [Supabase](https://supabase.com)
-3. Get your **Connection string** (Transaction mode / Pooler) from Supabase Settings -> Database.
-4. On Railway, create a new project from your GitHub repo.
-5. Set environment variables:
-   - `JWT_SECRET`: random string
-   - `JWT_REFRESH_SECRET`: random string
-   - `NODE_ENV`: `production`
-   - `DATABASE_URL`: Your Supabase connection string.
+1. Push code to GitHub.
+2. Create a project on [Supabase](https://supabase.com).
+3. **Get Connection String**:
+   - Go to **Settings** -> **Database**.
+   - Under "Connection string", select **URI**.
+   - **IMPORTANT**: Click **"Pooler settings"** and ensure Mode is set to **"Transaction"** (Port 6543).
+   - Copy the URI.
+4. **Configure Railway**:
+   - Create a new project on Railway from your GitHub repo.
+   - Set `DATABASE_URL` to the URI you copied.
+   - **IMPORTANT**: Add `?pgbouncer=true` to the end of your connection string.
+   - Replace `[YOUR-PASSWORD]` with your actual Supabase database password.
+5. Set other variables: `JWT_SECRET`, `JWT_REFRESH_SECRET`, `NODE_ENV=production`.
 6. Deploy.
 
 ## API Endpoints
