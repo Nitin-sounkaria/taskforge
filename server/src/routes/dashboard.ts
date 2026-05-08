@@ -27,8 +27,8 @@ router.get('/stats', authenticate, async (req: AuthRequest, res: Response): Prom
       }),
     ]);
 
-    const statusCounts = { TODO: 0, IN_PROGRESS: 0, IN_REVIEW: 0, DONE: 0 };
-    tasks.forEach((t) => { statusCounts[t.status]++; });
+    const statusCounts: Record<string, number> = { TODO: 0, IN_PROGRESS: 0, IN_REVIEW: 0, DONE: 0 };
+    tasks.forEach((t) => { if (statusCounts[t.status] !== undefined) statusCounts[t.status]++; });
 
     const now = new Date();
     const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -121,7 +121,7 @@ router.get('/charts', authenticate, async (req: AuthRequest, res: Response): Pro
       select: { priority: true, status: true, projectId: true, assigneeId: true, createdAt: true },
     });
 
-    const priorityCounts = { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 };
+    const priorityCounts: Record<string, number> = { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 };
     allTasks.forEach((t) => { if (priorityCounts[t.priority] !== undefined) priorityCounts[t.priority]++; });
 
     // Tasks per project
