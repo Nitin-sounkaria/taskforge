@@ -20,6 +20,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
+// Health check (at the top for reliability)
+app.get('/api/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+
 // Rate limiting on auth
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -36,7 +39,6 @@ app.use('/api', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 // Health check
-app.get('/api/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 // Serve frontend in production
 if (env.NODE_ENV === 'production') {
