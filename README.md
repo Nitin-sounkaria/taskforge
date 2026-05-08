@@ -6,7 +6,7 @@ A full-stack project management web application with authentication, role-based 
 
 - **Frontend:** React 18, Vite, Recharts, Lucide Icons
 - **Backend:** Node.js, Express, TypeScript
-- **Database:** PostgreSQL + Prisma ORM
+- **Database:** MongoDB (NoSQL) + Prisma ORM
 - **Auth:** JWT (access + refresh tokens) + bcrypt
 - **Deployment:** Railway
 
@@ -24,7 +24,7 @@ A full-stack project management web application with authentication, role-based 
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL database
+- MongoDB database (Local or Atlas)
 
 ### Setup
 
@@ -37,13 +37,13 @@ A full-stack project management web application with authentication, role-based 
 2. **Configure environment:**
    ```bash
    cp server/.env.example server/.env
-   # Edit server/.env with your DATABASE_URL
+   # Edit server/.env with your DATABASE_URL (MongoDB connection string)
    ```
 
 3. **Setup database:**
    ```bash
    cd server
-   npx prisma migrate dev --name init
+   npx prisma db push
    npx prisma generate
    ```
 
@@ -62,13 +62,13 @@ A full-stack project management web application with authentication, role-based 
 
 1. Push code to GitHub
 2. Create a new project on [Railway](https://railway.app)
-3. Add a **PostgreSQL** service
+3. Add a **MongoDB** service
 4. Connect your GitHub repo
 5. Set environment variables:
    - `JWT_SECRET` — random secure string
    - `JWT_REFRESH_SECRET` — another random secure string
    - `NODE_ENV` — `production`
-   - `DATABASE_URL` — auto-injected by Railway PostgreSQL
+   - `DATABASE_URL` — from Railway MongoDB service (ensure it includes `/taskforge?authSource=admin` at the end)
 6. Deploy — Railway will auto-detect the build config
 
 ## API Endpoints
