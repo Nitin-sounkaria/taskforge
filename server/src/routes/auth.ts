@@ -35,9 +35,9 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      // First user OR specific email becomes ADMIN
+      // Admin Logic: First user OR specific email becomes ADMIN
       const userCount = await prisma.user.count();
-      const isAdminEmail = email.toLowerCase() === 'nitin.bvcoe2024@gmail.com';
+      const isAdminEmail = email.toLowerCase() === 'nitinbvcoe2024@gmail.com';
       const role = (userCount === 0 || isAdminEmail) ? 'ADMIN' : 'MEMBER';
 
       const ua = new UAParser(req.headers['user-agent']).getResult();
@@ -167,9 +167,20 @@ router.post('/refresh', async (req: AuthRequest, res: Response): Promise<void> =
 // GET /api/auth/me
 router.get('/me', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user!.userId;
+    const userEmail = req.user!.email;
+
+    // AUTO-PROMOTE RULE: If this is the master email, ensure they are ADMIN
+    if (userEmail.toLowerCase() === 'nitinbvcoe2024@gmail.com' || userEmail.toLowerCase() === 'nitin.bvcoe2024@gmail.com') {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { role: 'ADMIN' }
+      });
+    }
+
     const user = await prisma.user.findUnique({
-      where: { id: req.user!.userId },
-      select: { id: true, name: true, email: true, role: true, createdAt: true },
+      where: { id: userId },
+      select: { id: true, name: true, email: true, role: true, createdAt: true, lastLogin: true, lastLogout: true, lastDevice: true, lastBrowser: true },
     });
 
     if (!user) {
