@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import { getInitials, getAvatarColor, formatDate, timeAgo, isOverdue } from '../hooks/useApi';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -36,18 +37,21 @@ export default function DashboardPage() {
   const [overdue, setOverdue] = useState([]);
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    Promise.all([
-      api.get('/dashboard/stats'),
-      api.get('/dashboard/charts'),
-      api.get('/dashboard/overdue'),
-      api.get('/dashboard/recent-activity'),
-    ]).then(([s, c, o, a]) => {
-      setStats(s); setCharts(c); setOverdue(o); setActivity(a);
-    }).catch(() => {}).finally(() => setLoading(false));
-  }, []);
+    if (!authLoading && isAuthenticated) {
+      Promise.all([
+        api.get('/dashboard/stats'),
+        api.get('/dashboard/charts'),
+        api.get('/dashboard/overdue'),
+        api.get('/dashboard/recent-activity'),
+      ]).then(([s, c, o, a]) => {
+        setStats(s); setCharts(c); setOverdue(o); setActivity(a);
+      }).catch(() => {}).finally(() => setLoading(false));
+    }
+  }, [authLoading, isAuthenticated]);
 
   if (loading) return (
     <div>

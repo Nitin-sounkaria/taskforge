@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import { useToast, getInitials, getAvatarColor } from '../hooks/useApi';
 import { Plus, FolderKanban, X } from 'lucide-react';
 
@@ -13,13 +14,18 @@ export default function ProjectListPage() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const toast = useToast();
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   const fetchProjects = () => {
     setLoading(true);
     api.get('/projects').then(setProjects).catch(() => toast.error('Failed to load projects')).finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchProjects(); }, []);
+  useEffect(() => { 
+    if (!authLoading && isAuthenticated) {
+      fetchProjects(); 
+    }
+  }, [authLoading, isAuthenticated]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
