@@ -8,6 +8,7 @@ import DashboardPage from './pages/DashboardPage';
 import ProjectListPage from './pages/ProjectListPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import SettingsPage from './pages/SettingsPage';
+import AdminDashboard from './pages/AdminDashboard';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="projects" element={<ProjectListPage />} />
               <Route path="projects/:id" element={<ProjectDetailPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="admin" element={<AdminDashboard />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

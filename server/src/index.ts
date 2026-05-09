@@ -9,6 +9,7 @@ import authRoutes from './routes/auth';
 import projectRoutes from './routes/projects';
 import taskRoutes from './routes/tasks';
 import dashboardRoutes from './routes/dashboard';
+import adminRoutes from './routes/admin';
 import { errorHandler, notFound } from './middleware/errorHandler';
 
 const app = express();
@@ -51,6 +52,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Error Handling
 app.use(notFound);

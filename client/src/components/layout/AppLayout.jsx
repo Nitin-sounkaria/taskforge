@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../api/client';
 import { getInitials, getAvatarColor } from '../../hooks/useApi';
-import { LayoutDashboard, FolderKanban, Settings, LogOut, Menu, X, Zap, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Settings, LogOut, Menu, X, Zap, ArrowLeft, Shield } from 'lucide-react';
 
 export default function AppLayout() {
   const { user, logout } = useAuth();
@@ -10,12 +11,20 @@ export default function AppLayout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => { logout(); navigate('/login'); };
+  const handleLogout = async () => { 
+    try { await api.post('/auth/logout'); } catch (e) {}
+    logout(); 
+    navigate('/login'); 
+  };
   const navItems = [
     { to: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
     { to: '/projects', icon: <FolderKanban size={20} />, label: 'Projects' },
     { to: '/settings', icon: <Settings size={20} />, label: 'Settings' },
   ];
+
+  if (user?.role === 'ADMIN') {
+    navItems.push({ to: '/admin', icon: <Shield size={20} />, label: 'Command Center' });
+  }
 
   const isHome = location.pathname === '/dashboard';
 
