@@ -58,11 +58,18 @@ export default function AdminDashboard() {
   if (loading) return <div className="loading-spinner"><div className="spinner" /></div>;
 
   return (
-    <div className="admin-dashboard">
-      <header className="section-header">
-        <div>
-          <h1>System Command Center</h1>
-          <p className="text-muted">Master control and deep analytics</p>
+    <div className="admin-dashboard admin-mode">
+      <header className="section-header admin-header">
+        <div className="flex items-center gap-lg">
+          <div>
+            <div className="admin-badge-glow">ADMIN MASTER MODE</div>
+            <h1 className="mt-1">Strategic Command Center</h1>
+            <p className="text-muted">Global system monitoring & security audit</p>
+          </div>
+        </div>
+        <div className="admin-status-indicator">
+          <div className="pulse-dot" />
+          <span>System Live</span>
         </div>
       </header>
 

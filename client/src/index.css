@@ -173,6 +173,16 @@ textarea.form-input { resize: vertical; min-height: 80px; }
 .modal-body { padding: 1.5rem; }
 .modal-footer { display: flex; justify-content: flex-end; gap: .75rem; padding: 1rem 1.5rem; border-top: 1px solid var(--border); }
 
+/* --- Admin Dashboard Overhaul --- */
+.admin-mode { position: relative; min-height: 100%; }
+.admin-mode::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(99,102,241,0.05) 0%, transparent 70%); pointer-events: none; }
+.admin-header { border-bottom: 2px solid var(--primary); padding-bottom: 1.5rem; margin-bottom: 2rem; position: relative; z-index: 1; }
+.admin-badge-glow { display: inline-block; padding: .25rem .75rem; background: var(--primary); color: #fff; font-size: .65rem; font-weight: 800; border-radius: 999px; letter-spacing: .1em; box-shadow: 0 0 15px var(--primary-glow); animation: pulse 2s infinite; }
+.admin-status-indicator { display: flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 600; color: var(--success); padding: .5rem 1rem; background: var(--success-bg); border-radius: var(--radius-sm); border: 1px solid rgba(16,185,129,.2); }
+.pulse-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); animation: pulse 1.5s infinite; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(0.95); } }
+
 /* --- Activity Feed --- */
 .activity-list { display: flex; flex-direction: column; gap: .75rem; }
 .activity-item { display: flex; gap: .75rem; padding: .75rem; border-radius: var(--radius-sm); transition: var(--transition); }
