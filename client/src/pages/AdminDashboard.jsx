@@ -300,83 +300,83 @@ export default function AdminDashboard() {
         </main>
       </div>
  
-+      {showAssignModal && (
-+        <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
-+          <div className="modal" onClick={e => e.stopPropagation()}>
-+            <div className="modal-header">
-+              <h3>Assign Task to {selectedUser.name}</h3>
-+              <button className="btn-ghost btn-icon" onClick={() => setShowAssignModal(false)}><X size={20}/></button>
-+            </div>
-+            <form onSubmit={handleAssignTask}>
-+              <div className="modal-body">
-+                <div className="form-group">
-+                  <label htmlFor="assign-project">Select Project *</label>
-+                  <select 
-+                    id="assign-project" 
-+                    className="form-input" 
-+                    value={assignForm.projectId}
-+                    onChange={e => setAssignForm({ ...assignForm, projectId: e.target.value })}
-+                  >
-+                    {allProjects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-+                  </select>
-+                </div>
-+                <div className="form-group">
-+                  <label htmlFor="assign-title">Task Title *</label>
-+                  <input 
-+                    id="assign-title" 
-+                    className="form-input" 
-+                    placeholder="What needs to be done?" 
-+                    value={assignForm.title}
-+                    onChange={e => setAssignForm({ ...assignForm, title: e.target.value })}
-+                  />
-+                </div>
-+                <div className="form-group">
-+                  <label htmlFor="assign-desc">Description</label>
-+                  <textarea 
-+                    id="assign-desc" 
-+                    className="form-input" 
-+                    placeholder="Details..." 
-+                    value={assignForm.description}
-+                    onChange={e => setAssignForm({ ...assignForm, description: e.target.value })}
-+                  />
-+                </div>
-+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-+                  <div className="form-group">
-+                    <label htmlFor="assign-priority">Priority</label>
-+                    <select 
-+                      id="assign-priority" 
-+                      className="form-input"
-+                      value={assignForm.priority}
-+                      onChange={e => setAssignForm({ ...assignForm, priority: e.target.value })}
-+                    >
-+                      <option value="LOW">Low</option>
-+                      <option value="MEDIUM">Medium</option>
-+                      <option value="HIGH">High</option>
-+                      <option value="CRITICAL">Critical</option>
-+                    </select>
-+                  </div>
-+                  <div className="form-group">
-+                    <label htmlFor="assign-due">Due Date</label>
-+                    <input 
-+                      id="assign-due" 
-+                      type="date" 
-+                      className="form-input" 
-+                      value={assignForm.dueDate}
-+                      onChange={e => setAssignForm({ ...assignForm, dueDate: e.target.value })}
-+                    />
-+                  </div>
-+                </div>
-+              </div>
-+              <div className="modal-footer">
-+                <button type="button" className="btn btn-secondary" onClick={() => setShowAssignModal(false)}>Cancel</button>
-+                <button type="submit" className="btn btn-primary" disabled={submitting}>
-+                  {submitting ? 'Assigning...' : 'Assign Task'}
-+                </button>
-+              </div>
-+            </form>
-+          </div>
-+        </div>
-+      )}
+      {showAssignModal && (
+        <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Assign Task to {selectedUser.name}</h3>
+              <button className="btn-ghost btn-icon" onClick={() => setShowAssignModal(false)}><X size={20}/></button>
+            </div>
+            <form onSubmit={handleAssignTask}>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label htmlFor="assign-project">Select Project *</label>
+                  <select 
+                    id="assign-project" 
+                    className="form-input" 
+                    value={assignForm.projectId}
+                    onChange={e => setAssignForm({ ...assignForm, projectId: e.target.value })}
+                  >
+                    {allProjects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="assign-title">Task Title *</label>
+                  <input 
+                    id="assign-title" 
+                    className="form-input" 
+                    placeholder="What needs to be done?" 
+                    value={assignForm.title}
+                    onChange={e => setAssignForm({ ...assignForm, title: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="assign-desc">Description</label>
+                  <textarea 
+                    id="assign-desc" 
+                    className="form-input" 
+                    placeholder="Details..." 
+                    value={assignForm.description}
+                    onChange={e => setAssignForm({ ...assignForm, description: e.target.value })}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="form-group">
+                    <label htmlFor="assign-priority">Priority</label>
+                    <select 
+                      id="assign-priority" 
+                      className="form-input"
+                      value={assignForm.priority}
+                      onChange={e => setAssignForm({ ...assignForm, priority: e.target.value })}
+                    >
+                      <option value="LOW">Low</option>
+                      <option value="MEDIUM">Medium</option>
+                      <option value="HIGH">High</option>
+                      <option value="CRITICAL">Critical</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="assign-due">Due Date</label>
+                    <input 
+                      id="assign-due" 
+                      type="date" 
+                      className="form-input" 
+                      value={assignForm.dueDate}
+                      onChange={e => setAssignForm({ ...assignForm, dueDate: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowAssignModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                  {submitting ? 'Assigning...' : 'Assign Task'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
      </div>
   );
 }
