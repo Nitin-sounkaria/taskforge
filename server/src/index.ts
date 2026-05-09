@@ -41,6 +41,19 @@ app.use(express.json({ limit: '10mb' }));
 // Health check (at the top for reliability)
 app.get('/api/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
+// Serve frontend in production (High priority)
+if (env.NODE_ENV === 'production') {
+  console.log('🌐 Production Mode: Enabling Frontend Serving');
+  app.use(express.static(clientPath));
+  
+  app.get('*', (req, res, next) => {
+    if (!req.path.startsWith('/api')) {
+      return res.sendFile(path.join(clientPath, 'index.html'));
+    }
+    next();
+  });
+}
+
 // Rate limiting on auth
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -55,26 +68,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-
-// Serve frontend in production
-if (env.NODE_ENV === 'production') {
-  app.use(express.static(clientPath));
-  
-  app.get('*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(clientPath, 'index.html'), (err) => {
-        if (err) {
-          console.error('❌ Failed to send index.html:', err);
-          res.status(404).json({ 
-            error: 'Frontend build not found', 
-            pathChecked: clientPath,
-            filesPresent: fs.existsSync(clientPath) ? fs.readdirSync(clientPath) : 'none'
-          });
-        }
-      });
-    }
-  });
-}
 
 // Error handling
 app.use(notFound);
