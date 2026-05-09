@@ -183,13 +183,13 @@ export default function ProjectDetailPage() {
           <div className="task-filters">
             <div style={{position:'relative',flex:1,maxWidth:280}}>
               <Search size={16} style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',color:'var(--text-muted)'}} />
-              <input className="form-input" placeholder="Search tasks..." value={filters.search} onChange={e => setFilters({...filters, search: e.target.value})} style={{paddingLeft:36}} />
+              <input id="task-search" name="taskSearch" className="form-input" placeholder="Search tasks..." value={filters.search} onChange={e => setFilters({...filters, search: e.target.value})} style={{paddingLeft:36}} />
             </div>
-            <select className="form-input" value={filters.status} onChange={e => setFilters({...filters, status: e.target.value})}>
+            <select id="filter-status" name="filterStatus" className="form-input" value={filters.status} onChange={e => setFilters({...filters, status: e.target.value})}>
               <option value="">All Status</option>
               {STATUSES.map(s => <option key={s} value={s}>{statusLabel(s)}</option>)}
             </select>
-            <select className="form-input" value={filters.priority} onChange={e => setFilters({...filters, priority: e.target.value})}>
+            <select id="filter-priority" name="filterPriority" className="form-input" value={filters.priority} onChange={e => setFilters({...filters, priority: e.target.value})}>
               <option value="">All Priority</option>
               {PRIORITIES.map(p => <option key={p} value={p}>{priorityLabel(p)}</option>)}
             </select>
