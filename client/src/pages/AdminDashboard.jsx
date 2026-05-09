@@ -281,11 +281,19 @@ export default function AdminDashboard() {
                                <tr key={s.id}>
                                  <td>{format(new Date(s.loginAt), 'MMM d, yyyy')}</td>
                                  <td className="text-success font-600">{format(new Date(s.loginAt), 'p')}</td>
-                                 <td className="text-muted">{s.logoutAt ? format(new Date(s.logoutAt), 'p') : <span className="pulse-text text-success font-600">LIVE</span>}</td>
+                                 <td className="text-muted">
+                                   {s.logoutAt 
+                                     ? format(new Date(s.logoutAt), 'p') 
+                                     : (new Date() - new Date(s.updatedAt || s.loginAt) < 10 * 60 * 1000)
+                                       ? <span className="pulse-text text-success font-600">LIVE</span> 
+                                       : <span className="text-warning font-600">AWAY</span>}
+                                 </td>
                                  <td className="font-600">
                                    {s.logoutAt 
                                      ? `${hours}h ${remainingMins}m` 
-                                     : <div className="flex items-center gap-sm"><span className="pulse-dot" /> Tracking...</div>}
+                                     : (new Date() - new Date(s.updatedAt || s.loginAt) < 10 * 60 * 1000)
+                                       ? <div className="flex items-center gap-sm"><span className="pulse-dot" /> Tracking...</div>
+                                       : <span className="text-muted">Inactive</span>}
                                  </td>
                                  <td className="text-xs">
                                    <div className="font-600">{s.ipAddress || '—'}</div>

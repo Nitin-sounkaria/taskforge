@@ -22,6 +22,17 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  // Heartbeat: Ping server every 5 minutes to keep session alive and track activity
+  useEffect(() => {
+    if (!user) return;
+    
+    const interval = setInterval(() => {
+      api.post('/auth/ping').catch(() => {});
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [user]);
+
   const login = useCallback(async (email, password) => {
     const data = await api.post('/auth/login', { email, password });
     localStorage.setItem('taskforge_token', data.accessToken);

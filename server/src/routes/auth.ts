@@ -260,4 +260,25 @@ router.get('/users', authenticate, async (req: AuthRequest, res: Response): Prom
   }
 });
 
+// POST /api/auth/ping - Heartbeat to keep session alive and track activity
+router.post('/ping', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user!.userId;
+    const activeSession = await prisma.userSession.findFirst({
+      where: { userId, logoutAt: null },
+      orderBy: { loginAt: 'desc' }
+    });
+
+    if (activeSession) {
+      await prisma.userSession.update({
+        where: { id: activeSession.id },
+        data: { updatedAt: new Date() }
+      });
+    }
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Heartbeat failed' });
+  }
+});
+
 export default router;
