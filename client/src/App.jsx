@@ -22,6 +22,15 @@ function PublicRoute({ children }) {
   return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
 }
 
+function AdminRoute({ children }) {
+  const { user, isAuthenticated, loading } = useAuth();
+  if (loading) return <div className="loading-spinner" style={{minHeight:'100vh'}}><div className="spinner" /></div>;
+  if (!isAuthenticated || user?.role !== 'ADMIN') {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -36,7 +45,7 @@ export default function App() {
               <Route path="projects" element={<ProjectListPage />} />
               <Route path="projects/:id" element={<ProjectDetailPage />} />
               <Route path="settings" element={<SettingsPage />} />
-              <Route path="admin" element={<AdminDashboard />} />
+              <Route path="admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
