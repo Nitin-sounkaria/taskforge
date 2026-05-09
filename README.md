@@ -1,99 +1,82 @@
-# TaskForge — Project Management App
+# TaskForge
 
-A full-stack project management web application with authentication, role-based access control, project & task management, and a real-time dashboard.
+TaskForge is a high-performance, full-stack task management application designed for teams and individuals who demand speed, security, and a beautiful user interface. Built with the modern web stack, it offers real-time organization, project tracking, and insightful analytics.
 
-## Tech Stack
+## ✨ Features
 
-- **Frontend:** React 18, Vite, Recharts, Lucide Icons
-- **Backend:** Node.js, Express, TypeScript
-- **Database:** PostgreSQL (Supabase) + Prisma ORM
-- **Auth:** JWT (access + refresh tokens) + bcrypt
-- **Deployment:** Railway
+- **Project Management**: Organize tasks into dedicated projects with unique tracking.
+- **Dynamic Dashboard**: Real-time analytics and status tracking for all your assignments.
+- **Secure Authentication**: Robust JWT-based security with secure password hashing and refresh token logic.
+- **PostgreSQL Power**: Backed by Supabase for enterprise-grade data reliability and performance.
+- **Premium UI**: Sleek, responsive design built for both desktop and mobile productivity.
 
-## Features
+## 🚀 Tech Stack
 
-- 🔐 **Authentication** — Signup/Login with JWT tokens
-- 📁 **Project Management** — Create, edit, archive, delete projects
-- 👥 **Team Management** — Add/remove members with Admin/Member roles
-- ✅ **Task Tracking** — Create, assign, update status, set priorities & due dates
-- 📊 **Dashboard** — Stats cards, pie/bar charts, overdue tasks, activity feed
-- 🔒 **RBAC** — Global roles (Admin/Member) + project-level roles
-- 📱 **Responsive** — Mobile-first design with collapsible sidebar
+- **Frontend**: React.js, Vite, Tailwind CSS, Lucide Icons
+- **Backend**: Node.js, Express, TypeScript
+- **Database**: PostgreSQL via Prisma ORM
+- **Hosting**: Railway & Supabase
 
-## Getting Started
+## 🛠️ Installation & Setup
 
 ### Prerequisites
-- Node.js 18+
-- MongoDB database (Local or Atlas)
+- Node.js (v18+)
+- A Supabase account (PostgreSQL)
 
-### Setup
+### 1. Clone the repository
+```bash
+git clone https://github.com/Nitin-sounkaria/taskforge.git
+cd taskforge
+```
 
-1. **Clone and install:**
-   ```bash
-   cd server && npm install
-   cd ../client && npm install
-   ```
+### 2. Install Dependencies
+```bash
+# Install server dependencies
+cd server && npm install
 
-2. **Configure environment:**
-   ```bash
-   cp server/.env.example server/.env
-   # Edit server/.env with your DATABASE_URL (MongoDB connection string)
-   ```
+# Install client dependencies
+cd ../client && npm install
+```
 
-3. **Setup database:**
-   ```bash
-   cd server
-   npx prisma db push
-   npx prisma generate
-   ```
+### 3. Environment Configuration
+Create a `.env` file in the `server` directory:
+```env
+DATABASE_URL="your_supabase_connection_string"
+JWT_SECRET="your_secure_random_string"
+JWT_REFRESH_SECRET="your_secure_refresh_string"
+PORT=3001
+NODE_ENV=development
+```
 
-4. **Run development servers:**
-   ```bash
-   # Terminal 1 — Backend
-   cd server && npm run dev
+### 4. Database Setup
+```bash
+cd server
+npx prisma db push
+```
 
-   # Terminal 2 — Frontend
-   cd client && npm run dev
-   ```
+### 5. Run Locally
+```bash
+# In one terminal (Backend)
+cd server
+npm run dev
 
-5. Open http://localhost:5173
+# In another terminal (Frontend)
+cd client
+npm run dev
+```
 
-## Railway + Supabase Deployment
+## 🚢 Deployment (Railway)
 
-1. Push code to GitHub.
-2. Create a project on [Supabase](https://supabase.com).
-3. **Get Connection String**:
-   - Go to **Settings** -> **Database**.
-   - Under "Connection string", select **URI**.
-   - **IMPORTANT**: Click **"Pooler settings"** and ensure Mode is set to **"Transaction"** (Port 6543).
-   - Copy the URI.
-4. **Configure Railway**:
-   - Create a new project on Railway from your GitHub repo.
-   - Set `DATABASE_URL` to the URI you copied.
-   - **IMPORTANT**: Add `?pgbouncer=true` to the end of your connection string.
-   - Replace `[YOUR-PASSWORD]` with your actual Supabase database password.
-5. Set other variables: `JWT_SECRET`, `JWT_REFRESH_SECRET`, `NODE_ENV=production`.
-6. Deploy.
+This project is optimized for **Railway** deployment using Nixpacks.
 
-## API Endpoints
+1. Connect your GitHub repository to Railway.
+2. Add the following Variables:
+   - `DATABASE_URL`: Your Supabase connection string (Port 5432).
+   - `JWT_SECRET`: A long random string.
+   - `JWT_REFRESH_SECRET`: Another long random string.
+   - `NODE_ENV`: `production`
+3. Railway will automatically detect the `nixpacks.toml` and deploy the application.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Register |
-| POST | `/api/auth/login` | Login |
-| POST | `/api/auth/refresh` | Refresh token |
-| GET | `/api/auth/me` | Current user |
-| GET | `/api/projects` | List projects |
-| POST | `/api/projects` | Create project |
-| GET | `/api/projects/:id` | Project details |
-| PUT | `/api/projects/:id` | Update project |
-| DELETE | `/api/projects/:id` | Delete project |
-| POST | `/api/projects/:id/members` | Add member |
-| DELETE | `/api/projects/:id/members/:userId` | Remove member |
-| GET | `/api/projects/:id/tasks` | List tasks |
-| POST | `/api/projects/:id/tasks` | Create task |
-| PUT | `/api/tasks/:id` | Update task |
-| DELETE | `/api/tasks/:id` | Delete task |
-| GET | `/api/dashboard/stats` | Dashboard stats |
-| GET | `/api/dashboard/overdue` | Overdue tasks |
-| GET | `/api/dashboard/recent-activity` | Activity feed |
+## 📄 License
+
+This project is licensed under the MIT License.
