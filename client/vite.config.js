@@ -13,7 +13,8 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist',
-    sourcemap: false
+    outDir: '../server/public',
+    sourcemap: false,
+    emptyOutDir: true
   }
 });
