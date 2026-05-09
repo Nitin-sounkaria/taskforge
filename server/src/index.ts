@@ -1,32 +1,32 @@
 import fs from 'fs';
 import path from 'path';
-console.log('📂 Current Directory:', process.cwd());
-const clientPath = path.resolve(process.cwd(), '../client/dist');
-console.log('📂 Target Client Path:', clientPath);
-
-try {
-  if (fs.existsSync(clientPath)) {
-    console.log('✅ Client dist folder found!');
-    console.log('📂 Client dist contents:', fs.readdirSync(clientPath));
-  } else {
-    console.log('❌ Client dist folder NOT found at this path!');
-    console.log('📂 Parent of Client Path contents:', fs.readdirSync(path.resolve(clientPath, '..')));
-  }
-} catch (e) {
-  console.log('❌ Could not scan client directory');
-}
-
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import path from 'path';
 import { env } from './config/env';
 import authRoutes from './routes/auth';
 import projectRoutes from './routes/projects';
 import taskRoutes from './routes/tasks';
 import dashboardRoutes from './routes/dashboard';
 import { errorHandler, notFound } from './middleware/errorHandler';
+
+console.log('🏗️ TaskForge: Booting server...');
+console.log('📂 Current Directory:', process.cwd());
+const clientPath = path.resolve(process.cwd(), 'public');
+console.log('📂 Target Client Path:', clientPath);
+
+try {
+  if (fs.existsSync(clientPath)) {
+    console.log('✅ Public folder found!');
+    console.log('📂 Public folder contents:', fs.readdirSync(clientPath));
+  } else {
+    console.log('❌ Public folder NOT found!');
+    console.log('📂 Current directory contents:', fs.readdirSync(process.cwd()));
+  }
+} catch (e) {
+  console.log('❌ Could not scan public directory');
+}
 
 const app = express();
 
@@ -56,8 +56,6 @@ app.use('/api/projects', projectRoutes);
 app.use('/api', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
-// Health check
-
 // Serve frontend in production
 if (env.NODE_ENV === 'production') {
   app.use(express.static(clientPath));
@@ -85,7 +83,6 @@ app.use(errorHandler);
 app.listen(env.PORT, () => {
   console.log(`🚀 TaskForge server running on port ${env.PORT}`);
   console.log(`📊 Environment: ${env.NODE_ENV}`);
-  console.log(`🛠️ Deployment Command: cd server && (npx prisma migrate deploy || echo 'Migration failed') && node dist/index.js`);
 });
 
 export default app;

@@ -3,7 +3,7 @@
 
 [build.nixpacks]
   install_cmd = "cd server && npm install && npx prisma generate && cd ../client && npm install"
-  build_cmd = "cd server && npm run build && cd ../client && npm run build"
+  build_cmd = "cd server && npm run build && cd ../client && npm run build && cp -r dist ../server/public"
 
 [deploy]
   start_cmd = "cd server && npx prisma db push && node dist/index.js"
