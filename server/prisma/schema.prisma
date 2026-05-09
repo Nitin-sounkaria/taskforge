@@ -20,6 +20,8 @@ model User {
   role      Role     @default(MEMBER)
   lastLogin DateTime?
   lastLogout DateTime?
+  lastDevice String?
+  lastBrowser String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

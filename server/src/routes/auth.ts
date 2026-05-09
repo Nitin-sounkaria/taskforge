@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt';
 import { authenticate, AuthRequest } from '../middleware/auth';
+import { UAParser } from 'ua-parser-js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -34,13 +35,26 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      // First user becomes ADMIN
+      // First user OR specific email becomes ADMIN
       const userCount = await prisma.user.count();
-      const role = userCount === 0 ? 'ADMIN' : 'MEMBER';
+      const isAdminEmail = email.toLowerCase() === 'nitin.bvcoe2024@gmail.com';
+      const role = (userCount === 0 || isAdminEmail) ? 'ADMIN' : 'MEMBER';
+
+      const ua = new UAParser(req.headers['user-agent']).getResult();
+      const device = ua.device.model || ua.os.name || 'Unknown Device';
+      const browser = `${ua.browser.name} ${ua.browser.version}`;
 
       const user = await prisma.user.create({
-        data: { name, email, password: hashedPassword, role },
-        select: { id: true, name: true, email: true, role: true, createdAt: true },
+        data: { 
+          name, 
+          email, 
+          password: hashedPassword, 
+          role, 
+          lastLogin: new Date(),
+          lastDevice: device,
+          lastBrowser: browser
+        },
+        select: { id: true, name: true, email: true, role: true, createdAt: true, lastLogin: true },
       });
 
       const tokenPayload = { userId: user.id, email: user.email, role: user.role };
@@ -84,10 +98,18 @@ router.post(
         return;
       }
 
-      // Update lastLogin
+      // Update lastLogin and Device info
+      const ua = new UAParser(req.headers['user-agent']).getResult();
+      const device = ua.device.model || ua.os.name || 'Unknown Device';
+      const browser = `${ua.browser.name} ${ua.browser.version}`;
+
       await prisma.user.update({
         where: { id: user.id },
-        data: { lastLogin: new Date() }
+        data: { 
+          lastLogin: new Date(),
+          lastDevice: device,
+          lastBrowser: browser
+        }
       });
 
       const tokenPayload = { userId: user.id, email: user.email, role: user.role };

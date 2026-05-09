@@ -50,6 +50,8 @@ router.get('/users', authenticate, isAdmin, async (req: AuthRequest, res: Respon
         role: true,
         lastLogin: true,
         lastLogout: true,
+        lastDevice: true,
+        lastBrowser: true,
         createdAt: true,
         _count: {
           select: {
