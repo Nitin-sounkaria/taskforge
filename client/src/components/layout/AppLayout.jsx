@@ -30,7 +30,7 @@ export default function AppLayout() {
 
   return (
     <div className="app-layout">
-      <aside className={`sidebar${sidebarOpen ? ' open' : ''}`}>
+      <aside className={`sidebar${sidebarOpen ? ' open' : ''} ${user?.role === 'ADMIN' ? 'admin-sidebar' : ''}`}>
         <Link to="/dashboard" className="sidebar-header" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Zap size={24} color="var(--primary)" />
           <span className="logo">TaskForge</span>
@@ -52,7 +52,10 @@ export default function AppLayout() {
               {getInitials(user?.name)}
             </div>
             <div className="user-info">
-              <div className="user-name">{user?.name}</div>
+              <div className="user-name">
+                {user?.name}
+                {user?.role === 'ADMIN' && <span className="badge badge-admin ml-1" style={{ fontSize: '10px' }}>ADMIN</span>}
+              </div>
               <div className="user-role">{user?.role?.toLowerCase()}</div>
             </div>
             <button className="btn-ghost btn-icon" onClick={handleLogout} title="Logout">
@@ -62,12 +65,13 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      <div className="main-content">
+      <div className={`main-content ${user?.role === 'ADMIN' ? 'admin-theme' : ''}`}>
         <header className="topbar">
           <div className="topbar-left">
             <button className="btn-ghost btn-icon mobile-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
               {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
+            {user?.role === 'ADMIN' && <div className="admin-master-pill">MASTER CONTROL</div>}
             {!isHome && (
               <button className="btn-back" onClick={() => navigate(-1)} title="Go Back">
                 <ArrowLeft size={18} />
@@ -76,7 +80,13 @@ export default function AppLayout() {
             )}
           </div>
           <div className="topbar-actions">
-            <span className="text-sm text-muted">Welcome, {user?.name?.split(' ')[0]}</span>
+            <div className="flex flex-col items-end">
+              <span className="text-sm font-600">
+                {user?.name?.split(' ')[0]}
+                {user?.role === 'ADMIN' && <span className="text-primary text-xs ml-1">● Master</span>}
+              </span>
+              <span className="text-xs text-muted">Welcome back</span>
+            </div>
             <div className="avatar avatar-sm" style={{ background: getAvatarColor(user?.name) }}>
               {getInitials(user?.name)}
             </div>
