@@ -17,8 +17,10 @@ The Member interface is optimized for personal productivity and clear task execu
 - **Task Lifecycle Management**: Streamlined workflows for moving tasks through 'To Do', 'In Progress', and 'Review' stages.
 - **Recent Activity Feed**: Real-time updates on personal and project-level changes.
 
-![Member Dashboard](https://github.com/Nitin-sounkaria/taskforge/raw/main/docs/screenshots/member_dashboard.png)
-*Figure 1: The Member Dashboard focusing on personal project execution.*
+<img width="800" height="400" alt="Screenshot 2026-05-09 174708" src="https://github.com/user-attachments/assets/1ecd59f5-1095-40d6-8cd5-914363015425" />
+<br>
+<img width="800" height="400" alt="Screenshot 2026-05-09 174816" src="https://github.com/user-attachments/assets/9eaea34c-1365-4b54-8e2c-96150302d386" />
+
 
 ---
 
@@ -30,8 +32,14 @@ The Administrative interface provides high-level strategic oversight and system-
 - **Strategic Task Delegation**: The ability to assign tasks to any member across any project from a centralized console.
 - **System-Wide Intelligence**: Real-time stats on total projects, overdue risks, and completed milestones.
 
-![Admin Master Control](https://github.com/Nitin-sounkaria/taskforge/raw/main/docs/screenshots/admin_dashboard.png)
-*Figure 2: The Administrative Master Control panel with global analytics.*
+<img width="800" height="400" alt="Screenshot 2026-05-09 175009" src="https://github.com/user-attachments/assets/1c759f3f-32f4-405d-87a0-f9cdb77ff87e" />
+<br>
+<img width="800" height="400" alt="Screenshot 2026-05-09 174938" src="https://github.com/user-attachments/assets/85f7b151-ab5e-410e-8f4e-ff8de4031a71" />
+<br>
+<img width="800" height="400" alt="Screenshot 2026-05-09 174911" src="https://github.com/user-attachments/assets/004ea26c-5d48-4964-873a-09adc5add137" />
+<br>
+<img width="800" height="400" alt="Screenshot 2026-05-09 174846" src="https://github.com/user-attachments/assets/8c43742d-ad4b-425f-aa78-2323e75fee02" />
+<br>
 
 ---
 
