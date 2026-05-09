@@ -115,6 +115,16 @@ router.post(
         }
       });
 
+      // Create Session record
+      await prisma.userSession.create({
+        data: {
+          userId: user.id,
+          device,
+          browser,
+          loginAt: new Date()
+        }
+      });
+
       const tokenPayload = { userId: user.id, email: user.email, role: updatedUser.role };
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
@@ -131,10 +141,25 @@ router.post(
 // POST /api/auth/logout
 router.post('/logout', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user!.userId;
     await prisma.user.update({
-      where: { id: req.user!.userId },
+      where: { id: userId },
       data: { lastLogout: new Date() }
     });
+
+    // Close latest active session
+    const activeSession = await prisma.userSession.findFirst({
+      where: { userId, logoutAt: null },
+      orderBy: { loginAt: 'desc' }
+    });
+
+    if (activeSession) {
+      await prisma.userSession.update({
+        where: { id: activeSession.id },
+        data: { logoutAt: new Date() }
+      });
+    }
+
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Logout tracking failed' });

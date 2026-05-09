@@ -53,6 +53,10 @@ router.get('/users', authenticate, isAdmin, async (req: AuthRequest, res: Respon
         lastDevice: true,
         lastBrowser: true,
         createdAt: true,
+        sessions: {
+          orderBy: { loginAt: 'desc' },
+          take: 20
+        },
         _count: {
           select: {
             assignedTasks: true,
@@ -74,7 +78,8 @@ router.get('/tasks', authenticate, isAdmin, async (req: AuthRequest, res: Respon
     const tasks = await prisma.task.findMany({
       include: {
         assignee: { select: { name: true, email: true } },
-        project: { select: { name: true } }
+        project: { select: { name: true } },
+        creator: { select: { name: true } }
       },
       orderBy: { dueDate: 'asc' }
     });

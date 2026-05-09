@@ -30,8 +30,22 @@ model User {
   assignedTasks Task[]          @relation("TaskAssignee")
   createdTasks  Task[]          @relation("TaskCreator")
   activityLogs  ActivityLog[]
+  sessions      UserSession[]
 
   @@map("users")
+}
+
+model UserSession {
+  id        String   @id @default(uuid())
+  userId    String
+  loginAt   DateTime @default(now())
+  logoutAt  DateTime?
+  device    String?
+  browser   String?
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
 }
 
 model Project {
