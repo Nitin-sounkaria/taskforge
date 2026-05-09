@@ -274,6 +274,22 @@ router.post('/ping', authenticate, async (req: AuthRequest, res: Response): Prom
         where: { id: activeSession.id },
         data: { updatedAt: new Date() }
       });
+    } else {
+      // Auto-recovery: If no active session, create one now
+      const ua = new UAParser(req.headers['user-agent']).getResult();
+      const device = ua.device.model || ua.os.name || 'Unknown Device';
+      const browser = `${ua.browser.name} ${ua.browser.version}`;
+      
+      await prisma.userSession.create({
+        data: {
+          userId,
+          device,
+          browser,
+          ipAddress: req.ip || (Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.headers['x-forwarded-for'])?.toString() || 'Unknown',
+          loginAt: new Date(),
+          updatedAt: new Date()
+        }
+      });
     }
     res.json({ success: true });
   } catch (error) {
