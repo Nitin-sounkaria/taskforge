@@ -43,11 +43,19 @@ app.use('/api/dashboard', dashboardRoutes);
 
 // Serve frontend in production
 if (env.NODE_ENV === 'production') {
-  const clientPath = path.join(__dirname, '../../client/dist');
+  const clientPath = path.resolve(__dirname, '../../client/dist');
+  console.log(`📂 Serving frontend from: ${clientPath}`);
+  
   app.use(express.static(clientPath));
+  
   app.get('*', (req, res) => {
     if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(clientPath, 'index.html'));
+      res.sendFile(path.join(clientPath, 'index.html'), (err) => {
+        if (err) {
+          console.error('❌ Failed to send index.html:', err);
+          res.status(404).json({ error: 'Frontend build not found. Please check build logs.' });
+        }
+      });
     }
   });
 }
