@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { api } from '../api/client';
 import { useToast } from '../hooks/useApi';
-import { Users, CheckSquare, Clock, AlertTriangle, Search, Monitor, Globe, BarChart3, ChevronRight, X, Calendar, Activity, Info } from 'lucide-react';
+import { Users, CheckSquare, Clock, AlertTriangle, Search, Monitor, Globe, BarChart3, ChevronRight, X, Calendar, Activity, Info, Plus } from 'lucide-react';
 import { format, differenceInMinutes, formatDistanceToNow } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 
@@ -13,19 +13,26 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [allProjects, setAllProjects] = useState([]);
+  const [assignForm, setAssignForm] = useState({ projectId: '', title: '', description: '', priority: 'MEDIUM', dueDate: '' });
+  const [submitting, setSubmitting] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [s, u, t] = await Promise.all([
+        const [s, u, t, p] = await Promise.all([
           api.get('/admin/stats'),
           api.get('/admin/users'),
-          api.get('/admin/tasks')
+          api.get('/admin/tasks'),
+          api.get('/admin/projects')
         ]);
         setStats(s);
         setUsers(u);
         setTasks(t);
+        setAllProjects(p);
+        if (p.length > 0) setAssignForm(prev => ({ ...prev, projectId: p[0].id }));
         if (u.length > 0) setSelectedUser(u[0]);
       } catch (err) {
         toast.error('Failed to load admin data');
@@ -52,6 +59,32 @@ export default function AdminDashboard() {
     }, {});
     return Object.entries(statusCounts).map(([name, value]) => ({ name: name.replace('_', ' '), value }));
   }, [selectedUser, tasks]);
+
+  const handleAssignTask = async (e) => {
+    e.preventDefault();
+    if (!assignForm.title.trim() || !assignForm.projectId) {
+      toast.error('Title and Project are required');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await api.post(`/projects/${assignForm.projectId}/tasks`, {
+        ...assignForm,
+        assigneeId: selectedUser.id,
+        dueDate: assignForm.dueDate || null
+      });
+      toast.success(`Task assigned to ${selectedUser.name}`);
+      setShowAssignModal(false);
+      setAssignForm({ ...assignForm, title: '', description: '', dueDate: '' });
+      // Refresh tasks
+      const newTasks = await api.get('/admin/tasks');
+      setTasks(newTasks);
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (loading) return <div className="loading-spinner"><div className="spinner" /></div>;
 
@@ -136,6 +169,9 @@ export default function AdminDashboard() {
                       <div className="q-label">Projects</div>
                       <div className="q-value">{selectedUser._count.ownedProjects}</div>
                     </div>
+                    <button className="btn btn-primary btn-sm ml-2" onClick={() => setShowAssignModal(true)}>
+                      <Plus size={16} /> Assign Task
+                    </button>
                   </div>
                 </div>
 
@@ -263,6 +299,84 @@ export default function AdminDashboard() {
           )}
         </main>
       </div>
-    </div>
+ 
++      {showAssignModal && (
++        <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
++          <div className="modal" onClick={e => e.stopPropagation()}>
++            <div className="modal-header">
++              <h3>Assign Task to {selectedUser.name}</h3>
++              <button className="btn-ghost btn-icon" onClick={() => setShowAssignModal(false)}><X size={20}/></button>
++            </div>
++            <form onSubmit={handleAssignTask}>
++              <div className="modal-body">
++                <div className="form-group">
++                  <label htmlFor="assign-project">Select Project *</label>
++                  <select 
++                    id="assign-project" 
++                    className="form-input" 
++                    value={assignForm.projectId}
++                    onChange={e => setAssignForm({ ...assignForm, projectId: e.target.value })}
++                  >
++                    {allProjects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
++                  </select>
++                </div>
++                <div className="form-group">
++                  <label htmlFor="assign-title">Task Title *</label>
++                  <input 
++                    id="assign-title" 
++                    className="form-input" 
++                    placeholder="What needs to be done?" 
++                    value={assignForm.title}
++                    onChange={e => setAssignForm({ ...assignForm, title: e.target.value })}
++                  />
++                </div>
++                <div className="form-group">
++                  <label htmlFor="assign-desc">Description</label>
++                  <textarea 
++                    id="assign-desc" 
++                    className="form-input" 
++                    placeholder="Details..." 
++                    value={assignForm.description}
++                    onChange={e => setAssignForm({ ...assignForm, description: e.target.value })}
++                  />
++                </div>
++                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
++                  <div className="form-group">
++                    <label htmlFor="assign-priority">Priority</label>
++                    <select 
++                      id="assign-priority" 
++                      className="form-input"
++                      value={assignForm.priority}
++                      onChange={e => setAssignForm({ ...assignForm, priority: e.target.value })}
++                    >
++                      <option value="LOW">Low</option>
++                      <option value="MEDIUM">Medium</option>
++                      <option value="HIGH">High</option>
++                      <option value="CRITICAL">Critical</option>
++                    </select>
++                  </div>
++                  <div className="form-group">
++                    <label htmlFor="assign-due">Due Date</label>
++                    <input 
++                      id="assign-due" 
++                      type="date" 
++                      className="form-input" 
++                      value={assignForm.dueDate}
++                      onChange={e => setAssignForm({ ...assignForm, dueDate: e.target.value })}
++                    />
++                  </div>
++                </div>
++              </div>
++              <div className="modal-footer">
++                <button type="button" className="btn btn-secondary" onClick={() => setShowAssignModal(false)}>Cancel</button>
++                <button type="submit" className="btn btn-primary" disabled={submitting}>
++                  {submitting ? 'Assigning...' : 'Assign Task'}
++                </button>
++              </div>
++            </form>
++          </div>
++        </div>
++      )}
+     </div>
   );
 }

@@ -89,4 +89,17 @@ router.get('/tasks', authenticate, isAdmin, async (req: AuthRequest, res: Respon
   }
 });
 
+// GET /api/admin/projects — list all projects for admin assignment
+router.get('/projects', isAdmin, async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const projects = await prisma.project.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' }
+    });
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch projects' });
+  }
+});
+
 export default router;
