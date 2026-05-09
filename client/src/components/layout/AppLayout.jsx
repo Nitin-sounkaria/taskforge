@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getInitials, getAvatarColor } from '../../hooks/useApi';
-import { LayoutDashboard, FolderKanban, Settings, LogOut, Menu, X, Zap } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Settings, LogOut, Menu, X, Zap, ArrowLeft } from 'lucide-react';
 
 export default function AppLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/login'); };
@@ -16,13 +17,15 @@ export default function AppLayout() {
     { to: '/settings', icon: <Settings size={20} />, label: 'Settings' },
   ];
 
+  const isHome = location.pathname === '/dashboard';
+
   return (
     <div className="app-layout">
       <aside className={`sidebar${sidebarOpen ? ' open' : ''}`}>
-        <div className="sidebar-header">
+        <Link to="/dashboard" className="sidebar-header" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Zap size={24} color="var(--primary)" />
           <span className="logo">TaskForge</span>
-        </div>
+        </Link>
         <nav className="sidebar-nav">
           {navItems.map((item) => (
             <NavLink
@@ -52,10 +55,17 @@ export default function AppLayout() {
 
       <div className="main-content">
         <header className="topbar">
-          <button className="btn-ghost btn-icon mobile-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
-            {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-          <div />
+          <div className="topbar-left">
+            <button className="btn-ghost btn-icon mobile-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+            {!isHome && (
+              <button className="btn-back" onClick={() => navigate(-1)} title="Go Back">
+                <ArrowLeft size={18} />
+                <span>Back</span>
+              </button>
+            )}
+          </div>
           <div className="topbar-actions">
             <span className="text-sm text-muted">Welcome, {user?.name?.split(' ')[0]}</span>
             <div className="avatar avatar-sm" style={{ background: getAvatarColor(user?.name) }}>

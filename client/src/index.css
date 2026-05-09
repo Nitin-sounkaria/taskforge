@@ -80,8 +80,12 @@ textarea.form-input { resize: vertical; min-height: 80px; }
 .main-content { flex: 1; margin-left: var(--sidebar-w); min-height: 100vh; }
 .topbar { height: 64px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; background: rgba(17,24,39,.8); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; }
 .topbar h2 { font-size: 1.25rem; }
+.topbar-left { display: flex; align-items: center; gap: 1rem; }
 .topbar-actions { display: flex; align-items: center; gap: .75rem; }
 .page-content { padding: 2rem; max-width: 1400px; }
+
+.btn-back { display: flex; align-items: center; gap: .5rem; padding: .5rem .75rem; background: transparent; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-secondary); font-size: .875rem; font-weight: 500; cursor: pointer; transition: var(--transition); }
+.btn-back:hover { background: var(--elevated); color: var(--text); border-color: var(--text-muted); }
 
 /* --- Avatar --- */
 .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: .875rem; color: #fff; flex-shrink: 0; }
