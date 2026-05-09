@@ -19,28 +19,41 @@ export default function AdminDashboard() {
   const [submitting, setSubmitting] = useState(false);
   const toast = useToast();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [s, u, t, p] = await Promise.all([
-          api.get('/admin/stats'),
-          api.get('/admin/users'),
-          api.get('/admin/tasks'),
-          api.get('/admin/projects')
-        ]);
-        setStats(s);
-        setUsers(u);
-        setTasks(t);
-        setAllProjects(p);
+  const fetchData = async (isSilent = false) => {
+    try {
+      const [s, u, t, p] = await Promise.all([
+        api.get('/admin/stats'),
+        api.get('/admin/users'),
+        api.get('/admin/tasks'),
+        api.get('/admin/projects')
+      ]);
+      setStats(s);
+      setUsers(u);
+      setTasks(t);
+      setAllProjects(p);
+      if (!isSilent) {
         if (p.length > 0) setAssignForm(prev => ({ ...prev, projectId: p[0].id }));
-        if (u.length > 0) setSelectedUser(u[0]);
-      } catch (err) {
-        toast.error('Failed to load admin data');
-      } finally {
-        setLoading(false);
+        if (u.length > 0) setSelectedUser(prev => prev ? u.find(user => user.id === prev.id) || u[0] : u[0]);
+      } else if (selectedUser) {
+        const updatedSelected = u.find(user => user.id === selectedUser.id);
+        if (updatedSelected) setSelectedUser(updatedSelected);
       }
-    };
+    } catch (err) {
+      if (!isSilent) toast.error('Failed to load admin data');
+    } finally {
+      if (!isSilent) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
+    
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      fetchData(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
