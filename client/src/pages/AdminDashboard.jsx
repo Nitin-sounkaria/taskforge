@@ -165,7 +165,7 @@ export default function AdminDashboard() {
                     <tr key={t.id}>
                       <td className="font-600">{t.title}</td>
                       <td>{t.assignee?.name || 'Unassigned'}</td>
-                      <td className="text-muted">{t.project.title}</td>
+                      <td className="text-muted">{t.project.name}</td>
                       <td>
                         <span className={new Date(t.dueDate) < new Date() && t.status !== 'DONE' ? 'text-danger font-500' : ''}>
                           {format(new Date(t.dueDate), 'MMM d, yyyy')}

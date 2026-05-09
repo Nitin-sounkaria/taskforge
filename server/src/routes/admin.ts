@@ -72,7 +72,7 @@ router.get('/tasks', authenticate, isAdmin, async (req: AuthRequest, res: Respon
     const tasks = await prisma.task.findMany({
       include: {
         assignee: { select: { name: true, email: true } },
-        project: { select: { title: true } }
+        project: { select: { name: true } }
       },
       orderBy: { dueDate: 'asc' }
     });
