@@ -186,6 +186,36 @@ export default function AdminDashboard() {
                 {activeTab === 'overview' && (
                   <div className="dashboard-grid">
                     <div className="card">
+                      <div className="flex justify-between items-center mb-1">
+                        <h3>Attendance Summary</h3>
+                        <Activity size={18} className="text-primary" />
+                      </div>
+                      <div className="flex gap-lg items-center mt-1">
+                        <div className="q-stat">
+                          <div className="q-label">Currently Live</div>
+                          <div className="q-value text-success">
+                            {users.filter(u => !u.lastLogout || new Date(u.lastLogin) > new Date(u.lastLogout)).length}
+                          </div>
+                        </div>
+                        <div className="q-stat">
+                          <div className="q-label">Total Sessions</div>
+                          <div className="q-value">{selectedUser.sessions?.length || 0}</div>
+                        </div>
+                      </div>
+                      <div className="progress-bar mt-1" style={{ height: 6 }}>
+                        <div 
+                          className="progress-fill" 
+                          style={{ 
+                            width: `${Math.min(100, (users.filter(u => !u.lastLogout || new Date(u.lastLogin) > new Date(u.lastLogout)).length / users.length) * 100)}%`,
+                            background: 'var(--success)'
+                          }} 
+                        />
+                      </div>
+                      <p className="text-xs text-muted mt-1">
+                        System-wide: {users.filter(u => !u.lastLogout || new Date(u.lastLogin) > new Date(u.lastLogout)).length} of {users.length} members are currently active.
+                      </p>
+                    </div>
+                    <div className="card">
                       <h3>Workload Distribution</h3>
                       <div style={{ height: '250px' }}>
                         <ResponsiveContainer width="100%" height="100%">
@@ -243,22 +273,27 @@ export default function AdminDashboard() {
                           </tr>
                         </thead>
                         <tbody>
-                          {selectedUser.sessions?.map(s => (
-                            <tr key={s.id}>
-                              <td>{format(new Date(s.loginAt), 'MMM d, yyyy')}</td>
-                              <td className="text-success font-600">{format(new Date(s.loginAt), 'p')}</td>
-                              <td className="text-muted">{s.logoutAt ? format(new Date(s.logoutAt), 'p') : 'Active'}</td>
-                              <td>
-                                {s.logoutAt 
-                                  ? `${differenceInMinutes(new Date(s.logoutAt), new Date(s.loginAt))}m` 
-                                  : <span className="pulse-text">Live</span>}
-                              </td>
-                              <td className="text-xs">
-                                <div>{s.ipAddress || '—'}</div>
-                                <div className="text-muted">{s.device}</div>
-                              </td>
-                            </tr>
-                          ))}
+                           {selectedUser.sessions?.map(s => {
+                             const mins = s.logoutAt ? differenceInMinutes(new Date(s.logoutAt), new Date(s.loginAt)) : 0;
+                             const hours = Math.floor(mins / 60);
+                             const remainingMins = mins % 60;
+                             return (
+                               <tr key={s.id}>
+                                 <td>{format(new Date(s.loginAt), 'MMM d, yyyy')}</td>
+                                 <td className="text-success font-600">{format(new Date(s.loginAt), 'p')}</td>
+                                 <td className="text-muted">{s.logoutAt ? format(new Date(s.logoutAt), 'p') : <span className="pulse-text text-success font-600">LIVE</span>}</td>
+                                 <td className="font-600">
+                                   {s.logoutAt 
+                                     ? `${hours}h ${remainingMins}m` 
+                                     : <div className="flex items-center gap-sm"><span className="pulse-dot" /> Tracking...</div>}
+                                 </td>
+                                 <td className="text-xs">
+                                   <div className="font-600">{s.ipAddress || '—'}</div>
+                                   <div className="text-muted truncate" style={{ maxWidth: 150 }}>{s.device}</div>
+                                 </td>
+                               </tr>
+                             );
+                           })}
                         </tbody>
                       </table>
                     </div>
