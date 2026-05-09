@@ -50,14 +50,14 @@ export default function SignupPage() {
           <div className="form-group">
             <label htmlFor="signup-name">Full Name</label>
             <input id="signup-name" name="name" type="text" className={`form-input${errors.name ? ' error' : ''}`}
-              placeholder="Alex Rivera" value={form.name}
+              placeholder="Full Name" value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })} />
             {errors.name && <div className="form-error">{errors.name}</div>}
           </div>
           <div className="form-group">
             <label htmlFor="signup-email">Email</label>
             <input id="signup-email" name="email" type="email" className={`form-input${errors.email ? ' error' : ''}`}
-              placeholder="alex@taskforge.com" value={form.email}
+              placeholder="Email Address" value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })} />
             {errors.email && <div className="form-error">{errors.email}</div>}
           </div>

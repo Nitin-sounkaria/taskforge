@@ -47,7 +47,7 @@ export default function LoginPage() {
           <div className="form-group">
             <label htmlFor="login-email">Email</label>
             <input id="login-email" name="email" type="email" className={`form-input${errors.email ? ' error' : ''}`}
-              placeholder="alex@taskforge.com" value={form.email}
+              placeholder="Email Address" value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })} />
             {errors.email && <div className="form-error">{errors.email}</div>}
           </div>
