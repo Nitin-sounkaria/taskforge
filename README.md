@@ -6,6 +6,35 @@ TaskForge is a high-performance, secure Strategic Operations platform designed f
 
 ---
 
+## 🖥️ Platform Overview
+
+TaskForge provides a tailored experience based on organizational roles, ensuring that every user has the exact tools they need for their level of responsibility.
+
+### 👤 Member Experience
+The Member interface is optimized for personal productivity and clear task execution.
+
+- **Personal Productivity Dashboard**: A focused view of assigned tasks, project progress, and priority breakdowns.
+- **Task Lifecycle Management**: Streamlined workflows for moving tasks through 'To Do', 'In Progress', and 'Review' stages.
+- **Recent Activity Feed**: Real-time updates on personal and project-level changes.
+
+![Member Dashboard](https://github.com/Nitin-sounkaria/taskforge/raw/main/docs/screenshots/member_dashboard.png)
+*Figure 1: The Member Dashboard focusing on personal project execution.*
+
+---
+
+### 🛡️ Administrative Experience (Master Control)
+The Administrative interface provides high-level strategic oversight and system-wide control.
+
+- **Operational Command Center**: A forensic look at member attendance, device security, and shift logs.
+- **Global Activity Trends**: 14-day visualization of organizational productivity and task creation velocity.
+- **Strategic Task Delegation**: The ability to assign tasks to any member across any project from a centralized console.
+- **System-Wide Intelligence**: Real-time stats on total projects, overdue risks, and completed milestones.
+
+![Admin Master Control](https://github.com/Nitin-sounkaria/taskforge/raw/main/docs/screenshots/admin_dashboard.png)
+*Figure 2: The Administrative Master Control panel with global analytics.*
+
+---
+
 ## 🚀 Key Features
 
 ### 1. Strategic Operations Control
@@ -18,11 +47,6 @@ TaskForge is a high-performance, secure Strategic Operations platform designed f
 - **Presence Intelligence**: Digital heartbeat system for accurate "Active" vs. "Away" status detection.
 - **Device & Security Auditing**: IP-address tracking and device fingerprinting for comprehensive security audits.
 
-### 3. Enterprise-Grade Security
-- **Role-Based Access Control (RBAC)**: Strict separation of Administrative and Member privileges.
-- **Hardened Security Headers**: Advanced Content Security Policy (CSP) and Helmet-secured middleware.
-- **Authentication Guards**: Multi-layered JWT-based session management with secure refresh logic.
-
 ---
 
 ## 🛠️ Technical Architecture
@@ -32,12 +56,6 @@ TaskForge is a high-performance, secure Strategic Operations platform designed f
 - **Backend**: Node.js & Express with TypeScript for strict type safety.
 - **Database**: PostgreSQL (Supabase) managed via Prisma ORM for type-safe database access.
 - **Visualization**: Interactive data analytics powered by Recharts.
-
-### Key Dependencies
-- `helmet`: Security header hardening.
-- `express-rate-limit`: DDoS and brute-force protection.
-- `prisma`: Scalable database management and migrations.
-- `lucide-react`: High-fidelity enterprise iconography.
 
 ---
 
