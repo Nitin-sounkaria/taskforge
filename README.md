@@ -1,82 +1,76 @@
-# TaskForge
+# TaskForge Strategic Operations Hub
 
-TaskForge is a high-performance, full-stack task management application designed for teams and individuals who demand speed, security, and a beautiful user interface. Built with the modern web stack, it offers real-time organization, project tracking, and insightful analytics.
+## Enterprise-Grade Project Management & Workforce Intelligence
 
-## ✨ Features
+TaskForge is a high-performance, secure Strategic Operations platform designed for centralized project management and real-time workforce intelligence. Built with a focus on data integrity, security, and administrative control, it empowers organizations to delegate tasks, track project lifecycles, and monitor operational efficiency with forensic precision.
 
-- **Project Management**: Organize tasks into dedicated projects with unique tracking.
-- **Dynamic Dashboard**: Real-time analytics and status tracking for all your assignments.
-- **Secure Authentication**: Robust JWT-based security with secure password hashing and refresh token logic.
-- **PostgreSQL Power**: Backed by Supabase for enterprise-grade data reliability and performance.
-- **Premium UI**: Sleek, responsive design built for both desktop and mobile productivity.
+---
 
-## 🚀 Tech Stack
+## 🚀 Key Features
 
-- **Frontend**: React.js, Vite, Tailwind CSS, Lucide Icons
-- **Backend**: Node.js, Express, TypeScript
-- **Database**: PostgreSQL via Prisma ORM
-- **Hosting**: Railway & Supabase
+### 1. Strategic Operations Control
+- **Global Delegation Engine**: Centralized task assignment across all organization projects.
+- **Member Intelligence Deck**: Detailed profiling of workforce activity, device ecosystem, and productivity trends.
+- **Operational Dashboard**: High-level system health metrics, including task distribution and overdue monitoring.
 
-## 🛠️ Installation & Setup
+### 2. Forensic Workforce Tracking
+- **Automated Attendance Logs**: Real-time "Clock-In" and "Clock-Out" tracking with session duration calculations.
+- **Presence Intelligence**: Digital heartbeat system for accurate "Active" vs. "Away" status detection.
+- **Device & Security Auditing**: IP-address tracking and device fingerprinting for comprehensive security audits.
 
-### Prerequisites
-- Node.js (v18+)
-- A Supabase account (PostgreSQL)
+### 3. Enterprise-Grade Security
+- **Role-Based Access Control (RBAC)**: Strict separation of Administrative and Member privileges.
+- **Hardened Security Headers**: Advanced Content Security Policy (CSP) and Helmet-secured middleware.
+- **Authentication Guards**: Multi-layered JWT-based session management with secure refresh logic.
 
-### 1. Clone the repository
+---
+
+## 🛠️ Technical Architecture
+
+### Core Stack
+- **Frontend**: React.js with Vite, React Router v7, and TailwindCSS-integrated design systems.
+- **Backend**: Node.js & Express with TypeScript for strict type safety.
+- **Database**: PostgreSQL (Supabase) managed via Prisma ORM for type-safe database access.
+- **Visualization**: Interactive data analytics powered by Recharts.
+
+### Key Dependencies
+- `helmet`: Security header hardening.
+- `express-rate-limit`: DDoS and brute-force protection.
+- `prisma`: Scalable database management and migrations.
+- `lucide-react`: High-fidelity enterprise iconography.
+
+---
+
+## 📦 Deployment & Setup
+
+### Environment Configuration
+Ensure the following variables are configured in your `.env` file:
 ```bash
-git clone https://github.com/Nitin-sounkaria/taskforge.git
-cd taskforge
+DATABASE_URL="your_postgresql_url"
+JWT_SECRET="your_secure_secret"
+JWT_REFRESH_SECRET="your_refresh_secret"
+NODE_ENV="production"
 ```
 
-### 2. Install Dependencies
+### Installation
 ```bash
-# Install server dependencies
-cd server && npm install
+# Install dependencies
+npm install
 
-# Install client dependencies
-cd ../client && npm install
+# Initialize database
+cd server && npx prisma db push
+
+# Build production assets
+cd .. && npm run build
+
+# Launch Strategic Hub
+npm start
 ```
 
-### 3. Environment Configuration
-Create a `.env` file in the `server` directory:
-```env
-DATABASE_URL="your_supabase_connection_string"
-JWT_SECRET="your_secure_random_string"
-JWT_REFRESH_SECRET="your_secure_refresh_string"
-PORT=3001
-NODE_ENV=development
-```
+---
 
-### 4. Database Setup
-```bash
-cd server
-npx prisma db push
-```
+## 🛡️ Maintenance & Support
+TaskForge is maintained by the Internal Operations Team. For access requests or technical audits, please contact the System Administrator.
 
-### 5. Run Locally
-```bash
-# In one terminal (Backend)
-cd server
-npm run dev
-
-# In another terminal (Frontend)
-cd client
-npm run dev
-```
-
-## 🚢 Deployment (Railway)
-
-This project is optimized for **Railway** deployment using Nixpacks.
-
-1. Connect your GitHub repository to Railway.
-2. Add the following Variables:
-   - `DATABASE_URL`: Your Supabase connection string (Port 5432).
-   - `JWT_SECRET`: A long random string.
-   - `JWT_REFRESH_SECRET`: Another long random string.
-   - `NODE_ENV`: `production`
-3. Railway will automatically detect the `nixpacks.toml` and deploy the application.
-
-## 📄 License
-
-This project is licensed under the MIT License.
+---
+© 2026 TaskForge Operations Hub. All Rights Reserved.

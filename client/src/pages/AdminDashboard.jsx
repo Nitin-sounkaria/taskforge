@@ -106,7 +106,7 @@ export default function AdminDashboard() {
       <header className="section-header admin-header">
         <div className="flex items-center gap-lg">
           <div>
-            <div className="admin-badge-glow">ADMIN MASTER MODE</div>
+            <div className="admin-badge-glow">ADMINISTRATIVE CONSOLE</div>
             <h1 className="mt-1">Strategic Operations Hub</h1>
           </div>
         </div>
