@@ -1,12 +1,19 @@
 import fs from 'fs';
-
-console.log('🏗️ TaskForge: Booting server...');
+import path from 'path';
 console.log('📂 Current Directory:', process.cwd());
+const clientPath = path.resolve(process.cwd(), '../client/dist');
+console.log('📂 Target Client Path:', clientPath);
+
 try {
-  console.log('📂 Parent Directory Contents:', fs.readdirSync('..'));
-  console.log('📂 Current Directory Contents:', fs.readdirSync('.'));
+  if (fs.existsSync(clientPath)) {
+    console.log('✅ Client dist folder found!');
+    console.log('📂 Client dist contents:', fs.readdirSync(clientPath));
+  } else {
+    console.log('❌ Client dist folder NOT found at this path!');
+    console.log('📂 Parent of Client Path contents:', fs.readdirSync(path.resolve(clientPath, '..')));
+  }
 } catch (e) {
-  console.log('❌ Could not list directories');
+  console.log('❌ Could not scan client directory');
 }
 
 import express from 'express';
@@ -53,9 +60,6 @@ app.use('/api/dashboard', dashboardRoutes);
 
 // Serve frontend in production
 if (env.NODE_ENV === 'production') {
-  const clientPath = path.resolve(__dirname, '../../client/dist');
-  console.log(`📂 Serving frontend from: ${clientPath}`);
-  
   app.use(express.static(clientPath));
   
   app.get('*', (req, res) => {
@@ -63,7 +67,11 @@ if (env.NODE_ENV === 'production') {
       res.sendFile(path.join(clientPath, 'index.html'), (err) => {
         if (err) {
           console.error('❌ Failed to send index.html:', err);
-          res.status(404).json({ error: 'Frontend build not found. Please check build logs.' });
+          res.status(404).json({ 
+            error: 'Frontend build not found', 
+            pathChecked: clientPath,
+            filesPresent: fs.existsSync(clientPath) ? fs.readdirSync(clientPath) : 'none'
+          });
         }
       });
     }
