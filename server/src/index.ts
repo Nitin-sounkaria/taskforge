@@ -1,4 +1,14 @@
+import fs from 'fs';
+
 console.log('🏗️ TaskForge: Booting server...');
+console.log('📂 Current Directory:', process.cwd());
+try {
+  console.log('📂 Parent Directory Contents:', fs.readdirSync('..'));
+  console.log('📂 Current Directory Contents:', fs.readdirSync('.'));
+} catch (e) {
+  console.log('❌ Could not list directories');
+}
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
