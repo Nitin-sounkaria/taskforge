@@ -42,8 +42,11 @@ app.use(express.json({ limit: '10mb' }));
 app.get('/api/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 // Serve frontend in production (High priority)
-if (env.NODE_ENV === 'production') {
-  console.log('🌐 Production Mode: Enabling Frontend Serving');
+const isProduction = env.NODE_ENV.trim().toLowerCase() === 'production';
+console.log(`🌐 Mode Check: isProduction = ${isProduction} (Value: "${env.NODE_ENV}")`);
+
+if (isProduction) {
+  console.log('✅ Enabling Production Frontend Serving');
   app.use(express.static(clientPath));
   
   app.get('*', (req, res, next) => {
