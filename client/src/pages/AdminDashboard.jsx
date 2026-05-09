@@ -203,7 +203,7 @@ export default function AdminDashboard() {
                         <h3>Attendance Summary</h3>
                         <Activity size={18} className="text-primary" />
                       </div>
-                      <div className="flex gap-lg items-center mt-1">
+                      <div className="flex gap-lg items-center mt-1 flex-wrap">
                         <div className="q-stat">
                           <div className="q-label">Currently Live</div>
                           <div className="q-value text-success">
