@@ -103,20 +103,23 @@ router.post(
       const device = ua.device.model || ua.os.name || 'Unknown Device';
       const browser = `${ua.browser.name} ${ua.browser.version}`;
 
-      await prisma.user.update({
+      const isAdminEmail = email.toLowerCase() === 'nitinbvcoe2024@gmail.com' || email.toLowerCase() === 'nitin.bvcoe2024@gmail.com';
+
+      const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: { 
           lastLogin: new Date(),
           lastDevice: device,
-          lastBrowser: browser
+          lastBrowser: browser,
+          role: isAdminEmail ? 'ADMIN' : user.role
         }
       });
 
-      const tokenPayload = { userId: user.id, email: user.email, role: user.role };
+      const tokenPayload = { userId: user.id, email: user.email, role: updatedUser.role };
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
 
-      const { password: _, ...userWithoutPassword } = user;
+      const { password: _, ...userWithoutPassword } = updatedUser;
       res.json({ user: { ...userWithoutPassword, lastLogin: new Date() }, accessToken, refreshToken });
     } catch (error) {
       console.error('Login error:', error);
