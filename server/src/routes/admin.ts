@@ -90,7 +90,7 @@ router.get('/tasks', authenticate, isAdmin, async (req: AuthRequest, res: Respon
 });
 
 // GET /api/admin/projects — list all projects for admin assignment
-router.get('/projects', isAdmin, async (req: AuthRequest, res: Response): Promise<void> => {
+router.get('/projects', authenticate, isAdmin, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const projects = await prisma.project.findMany({
       select: { id: true, name: true },
