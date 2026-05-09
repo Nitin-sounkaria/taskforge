@@ -203,7 +203,7 @@ export default function AdminDashboard() {
                             <th>Clock In</th>
                             <th>Clock Out</th>
                             <th>Duration</th>
-                            <th>Device</th>
+                            <th>IP & Device</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -217,7 +217,10 @@ export default function AdminDashboard() {
                                   ? `${differenceInMinutes(new Date(s.logoutAt), new Date(s.loginAt))}m` 
                                   : <span className="pulse-text">Live</span>}
                               </td>
-                              <td className="text-xs">{s.device}</td>
+                              <td className="text-xs">
+                                <div>{s.ipAddress || '—'}</div>
+                                <div className="text-muted">{s.device}</div>
+                              </td>
                             </tr>
                           ))}
                         </tbody>

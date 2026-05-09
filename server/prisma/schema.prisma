@@ -42,6 +42,7 @@ model UserSession {
   logoutAt  DateTime?
   device    String?
   browser   String?
+  ipAddress String?
   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

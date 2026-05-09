@@ -57,12 +57,27 @@ router.post(
         select: { id: true, name: true, email: true, role: true, createdAt: true, lastLogin: true },
       });
 
+      // Create Session record
+      await prisma.userSession.create({
+        data: {
+          userId: user.id,
+          device,
+          browser,
+          ipAddress: req.ip || (Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.headers['x-forwarded-for'])?.toString() || 'Unknown',
+          loginAt: new Date()
+        }
+      });
+
       const tokenPayload = { userId: user.id, email: user.email, role: user.role };
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
 
       res.status(201).json({ user, accessToken, refreshToken });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        res.status(409).json({ error: 'An account with this email already exists.' });
+        return;
+      }
       console.error('Signup error:', error);
       res.status(500).json({ error: 'Failed to create account' });
     }
@@ -121,6 +136,7 @@ router.post(
           userId: user.id,
           device,
           browser,
+          ipAddress: req.ip || (Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.headers['x-forwarded-for'])?.toString() || 'Unknown',
           loginAt: new Date()
         }
       });
