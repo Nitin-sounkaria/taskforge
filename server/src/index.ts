@@ -33,7 +33,7 @@ const app = express();
 // Security middleware
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(cors({
-  origin: env.NODE_ENV === 'production' ? true : env.FRONTEND_URL,
+  origin: true, // Allow the current domain
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));

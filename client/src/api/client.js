@@ -18,7 +18,7 @@ class ApiClient {
 
     const res = await fetch(`${BASE_URL}${endpoint}`, config);
 
-    if (res.status === 401) {
+    if (res.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/signup')) {
       const refreshed = await this.tryRefresh();
       if (refreshed) {
         config.headers.Authorization = `Bearer ${this.getToken()}`;
