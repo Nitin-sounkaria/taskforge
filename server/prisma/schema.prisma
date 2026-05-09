@@ -7,6 +7,7 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+// Updated at: 2026-05-09
 
 model User {
   id        String   @id @default(uuid())
