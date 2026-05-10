@@ -56,7 +56,39 @@ The Administrative interface provides high-level strategic oversight and system-
 
 ---
 
-## 🛠️ Technical Architecture
+## 🏗️ System Architecture
+
+TaskForge is built on a modern three-tier architecture designed for maximum scalability, security, and real-time responsiveness.
+
+### 1. Presentation Layer (Frontend)
+- **Engine**: React 18+ with Vite for high-performance asset bundling.
+- **State Management**: Context-driven architecture for real-time auth and session persistence.
+- **Design System**: Custom Vanilla CSS with CSS Variables for theme consistency and zero-flicker rendering.
+
+### 2. Intelligence Layer (Backend)
+- **Engine**: Node.js & Express.js with TypeScript for end-to-end type safety.
+- **Security Protocols**: JWT-based session management, Bcrypt hashing, and Helmet-secured headers.
+- **Attendance Logic**: Automated 'Pulse Engine' that processes heartbeat pings to detect member presence.
+
+### 3. Persistence Layer (Database)
+- **Engine**: PostgreSQL (managed via Supabase) for robust relational data management.
+- **ORM**: Prisma for type-safe database queries and automated schema migrations.
+- **Forensic Logs**: Immutable audit trails for every project modification and user session.
+
+---
+
+## 🔄 Data & Deployment Flow
+
+1. **The Heartbeat Sync**: The client pings the server every 5 minutes to keep sessions alive and update forensic logs.
+2. **The Command Interceptor**: All API requests are intercepted to verify JWT integrity before hitting the database.
+3. **Automated CI/CD**: 
+   - **Local Dev**: Code is authored and verified.
+   - **GitHub**: `git push` triggers the production build.
+   - **Railway**: Automated Nixpacks build, database migration, and zero-downtime deployment.
+
+---
+
+## 🛡️ Technical Architecture
 
 ### Core Stack
 - **Frontend**: React.js with Vite, React Router v7, and TailwindCSS-integrated design systems.
