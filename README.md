@@ -1,5 +1,4 @@
-# TaskForge Strategic Operations Hub
-
+# TaskForge 
 TaskForge is a high-performance, secure Strategic Operations platform designed for centralized project management and real-time workforce intelligence. Built with a focus on data integrity, security, and administrative control, it empowers organizations to delegate tasks, track project lifecycles, and monitor operational efficiency with forensic precision.
 
 ---
